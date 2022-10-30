@@ -3,7 +3,7 @@
   (:require [clojure.java.shell :as sh]
             [cheshire.core :as json]))
 
-(def active-days #{"FRIDAY" "SATURDAY" "SUNDAY" "MONDAY"})
+(def active-days #{"SATURDAY" "SUNDAY" "MONDAY"})
 
 (defn day-of-week
   [dt]
@@ -49,9 +49,13 @@
 
       (< (days-between now next-col) 7)
       (do (prn "both bins")
-          (sh/sh "./scripts/both-bins.sh"))
+          (if (= "MONDAY" (day-of-week now))
+            (sh/sh "./scripts/both-bins-monday.sh")
+            (sh/sh "./scripts/both-bins.sh")))
 
       :else
       (do (prn "just recycling")
-          (sh/sh "./scripts/just-recycling.sh"))))
+          (if (= "MONDAY" (day-of-week now))
+            (sh/sh "./scripts/just-recycling-monday.sh")
+            (sh/sh "./scripts/just-recycling.sh")))))
   (System/exit 0))
