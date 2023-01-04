@@ -43,6 +43,11 @@
   (let [now (now)
         next-col (next-collection-date)]
     (cond
+      (and (= 5 (days-between now next-col))
+           (= "WEDNESDAY" (day-of-week now)))
+      (do (prn "veg box")
+          (sh/sh "./scripts/veg-box.sh"))
+
       (not (active-days (day-of-week now)))
       (do (prn "no bins any time soon")
           (sh/sh "./scripts/no-bins.sh"))
